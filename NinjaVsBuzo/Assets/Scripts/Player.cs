@@ -9,6 +9,8 @@ public class Player : MonoBehaviour
     public float jumForce = 200;
     private Rigidbody2D rig;
     private Animator anim;
+
+    private bool canJump;
     // Start is called before the first frame update
     void Start()
     {
@@ -20,6 +22,9 @@ public class Player : MonoBehaviour
             Camera.main.transform.SetParent(transform);
             Camera.main.transform.position = transform.position + (Vector3.up) +transform.forward * -10;
         }
+
+        //Permite el salto
+        canJump = true;
     }
 
     // Update is called once per frame
@@ -45,8 +50,12 @@ public class Player : MonoBehaviour
                 GetComponent<PhotonView>().RPC("RotateSprite", RpcTarget.All, true);
 
             //Salto
-            if (Input.GetButtonDown("Jump"))
+            if (canJump && Input.GetButtonDown("Jump"))
+            {
                 rig.AddForce(transform.up * jumForce);
+                canJump = false;
+            }
+                
 
             //Animación
             anim.SetFloat("velocityX", Mathf.Abs(rig.velocity.x));
@@ -59,5 +68,11 @@ public class Player : MonoBehaviour
     public void RotateSprite(bool rotate)
     {
         GetComponent<SpriteRenderer>().flipX = rotate;
+    }
+
+    //Método para controlar cuando toque suelo
+    private void OnCollisionEnter2D(Collision2D other) {
+        if(other.gameObject.CompareTag("Floor"))
+            canJump = true;
     }
 }

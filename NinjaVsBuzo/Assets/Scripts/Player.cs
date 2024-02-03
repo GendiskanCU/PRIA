@@ -10,6 +10,7 @@ public class Player : MonoBehaviour
     private Rigidbody2D rig;
     private Animator anim;
 
+    //Para controlar cuándo puede saltar el personaje
     private bool canJump;
     // Start is called before the first frame update
     void Start()
@@ -70,7 +71,7 @@ public class Player : MonoBehaviour
         GetComponent<SpriteRenderer>().flipX = rotate;
     }
 
-    //Método para controlar cuando toque suelo
+    //Método para controlar cuando el personaje toque suelo
     private void OnCollisionEnter2D(Collision2D other) {
         if(other.gameObject.CompareTag("Floor"))
             canJump = true;

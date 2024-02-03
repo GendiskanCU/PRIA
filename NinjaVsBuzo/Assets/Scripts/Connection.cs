@@ -40,8 +40,8 @@ public class Connection : MonoBehaviourPunCallbacks
     }
 
     private void Update() {
-        //En el update se controla si se pasa a la siguiente escena cuando haya más de un jugador
-        if(PhotonNetwork.IsMasterClient && PhotonNetwork.CurrentRoom.PlayerCount > 1)
+        //En el update se controla si se pasa a la siguiente escena cuando haya más de dos jugadores
+        if(PhotonNetwork.IsMasterClient && PhotonNetwork.CurrentRoom.PlayerCount > 2)
         {
             PhotonNetwork.LoadLevel(1);
             Destroy(this);

@@ -23,7 +23,7 @@ public class ManejadorPuntos : MonoBehaviourPunCallbacks
     {
         string valor = VariableLocalInput.text;
         VariableLocalText.text = valor;//El jugador local cambia el valor de su variable local
-        //Avisa al otro jugador para que también cambie el valor que referencia a esa variable
+        //Avisa al otro jugador para que cambie el valor que referencia a esa variable
         photonView.RPC(nameof(CambiarValorEnRed), RpcTarget.OthersBuffered, valor);
     }
 

@@ -10,12 +10,12 @@ using Photon.Realtime;
 public class UI_Informacion : MonoBehaviourPunCallbacks, IPunObservable //Hay que hacerlo observable
 {
     public TextMeshProUGUI informacion;//Texto del banner
-    public int playerNum;//Número del jugador
+    public int playerNum;//Num. del jugador
 
     // Start is called before the first frame update
     void Start()
     {
-        StartCoroutine("SetPlayerOrEnemy");//Lanza la corutina que comprobará si somos el jugador o el enemigo
+        StartCoroutine("SetPlayerOrEnemy");//Lanza la corutina que comprueba si somos el jugador o el enemigo
     }
 
     IEnumerator SetPlayerOrEnemy()
@@ -24,7 +24,7 @@ public class UI_Informacion : MonoBehaviourPunCallbacks, IPunObservable //Hay qu
 
         if(photonView.IsMine)
         {
-            informacion.text = "Soy el jugador";//El photonView es mío
+            informacion.text = "Soy el jugador";
         }
         if(!photonView.IsMine)
         {
@@ -32,7 +32,7 @@ public class UI_Informacion : MonoBehaviourPunCallbacks, IPunObservable //Hay qu
         }
     }
 
-    //Implementación de la interfaz IPunObservable
+    //Hay que implementar la interfaz IPunObservable
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
         //throw new System.NotImplementedException();

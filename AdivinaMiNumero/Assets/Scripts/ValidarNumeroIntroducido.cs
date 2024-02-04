@@ -11,8 +11,8 @@ public class ValidarNumeroIntroducido : MonoBehaviour
     void Start()
     {
         entradaNumero = GetComponent<TMP_InputField>();
-
-        
+        //Inicialmente, el recuadro se rellenará con un número por defecto aunque el usuario lo podrá cambiar
+        entradaNumero.text = Random.Range(1, 101).ToString();
     }
 
     public void ValidaNumero()
@@ -25,8 +25,8 @@ public class ValidarNumeroIntroducido : MonoBehaviour
         }
         else
         {
-            //Si falla la conversión a número lo deja en blanco
-            entradaNumero.text = "";
+            //Si falla la conversión a número genera un aleatorio entre 1 y 100 y lo introduce en sustitución de lo escrito por el usuario
+            entradaNumero.text = Random.Range(1, 101).ToString();
         }
     }
 }

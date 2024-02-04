@@ -10,31 +10,39 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject panelAnfitrion;
     [SerializeField] private GameObject panelJugador;
 
-    //Para controlar los textos que van a mostrarse
-    ControlDialogo dialogo;
+    [SerializeField] private AccionesAnfitrion accionesAnfitrion;//Panel con las acciones de cada participante
+    [SerializeField] private AccionesJugador accionesJugador;  
+    private ControlDialogo dialogo;//Para controlar los textos que van a mostrarse
 
     // Start is called before the first frame update
     void Start()
     {
-        ActivaPanelJugador();
+        StartCoroutine(ActivaPanelAnfitrion());
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    
 
     /// <summary>
-    /// Activa el panel del Anfitrión y muestra el mensaje de bienvenida
+    /// Activa el panel del Anfitrión, prepara sus componentes, muestra el mensaje de bienvenida
+    /// e inicia el juego/// 
     /// </summary>
-    public void ActivaPanelAnfitrion()
+    public IEnumerator ActivaPanelAnfitrion()
     {
         panelAnfitrion.gameObject.SetActive(true);
 
         //Captura el script de control de diálogo del anfitrión
-        dialogo = panelAnfitrion.gameObject.transform.GetChild(0).gameObject.GetComponent<ControlDialogo>();
-        dialogo.MuestraTexto("Bienvenido, anfitrión");
+        dialogo = panelAnfitrion.gameObject.transform.GetChild(0).gameObject.GetComponent<ControlDialogo>();        
+
+        yield return StartCoroutine(dialogo.MuestraTexto("¡Bienvenid@!! Eres el anfitrión del juego Adivina Mi Número. Piensa en un número entre 1 y 100.\n" + 
+        "Escríbelo en el cuadro de texto y pulsa Iniciar"));
+
+        AnfitrionIniciaJuego(); 
+    }
+
+    private void AnfitrionIniciaJuego()
+    {       
+        accionesAnfitrion.ActivaCuadroTexto();
+        accionesAnfitrion.ActivaBotonIniciar();
     }
 
 

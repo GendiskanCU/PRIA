@@ -13,18 +13,18 @@ public class ControlDialogo : MonoBehaviour
     /// Muestra un texto en el cuadro de diálogo
     /// </summary>
     /// <param name="textoAMostrar"></param>
-    public void MuestraTexto(string textoAMostrar)
+    public IEnumerator MuestraTexto(string textoAMostrar)
     {
         dialogo.text = "";
-        StartCoroutine(EscribeTexto(textoAMostrar));
+        yield return StartCoroutine(EscribeTexto(textoAMostrar));//Lanza la corutina EscribeTexto y espera a que finalice        
     }
 
-    //Muestra el texto poco a poco
+    //Muestra los caracteres del texto con un intervalo de tiempo
     IEnumerator EscribeTexto(string texto)
     {
         for(int i = 0; i < texto.Length; i++)
         {
-             yield return new WaitForSeconds(0.1f);
+             yield return new WaitForSeconds(0.025f);
              dialogo.text += texto[i];
         }
     }

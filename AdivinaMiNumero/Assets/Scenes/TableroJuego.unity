@@ -217,7 +217,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 8
+  m_HorizontalAlignment: 2
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -691,7 +691,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 283777338}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1635694333}
+        m_TargetAssemblyTypeName: AccionesAnfitrion, Assembly-CSharp
+        m_MethodName: BotonMenor
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &283777338
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1792,7 +1804,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 8
+  m_HorizontalAlignment: 2
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -2781,7 +2793,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1537761554}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1635694333}
+        m_TargetAssemblyTypeName: AccionesAnfitrion, Assembly-CSharp
+        m_MethodName: BotonAcierto
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1537761554
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3446,7 +3470,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1715388070}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1635694333}
+        m_TargetAssemblyTypeName: AccionesAnfitrion, Assembly-CSharp
+        m_MethodName: BotonMayor
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1715388070
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4114,7 +4150,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2046445578}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1624785786}
+        m_TargetAssemblyTypeName: AccionesJugador, Assembly-CSharp
+        m_MethodName: BotonEnviar
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &2046445578
 MonoBehaviour:
   m_ObjectHideFlags: 0

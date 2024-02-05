@@ -17,7 +17,7 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        StartCoroutine(ActivaPanelAnfitrion());
+        StartCoroutine(ActivaPanelJugador());
     }
 
     
@@ -36,27 +36,25 @@ public class GameManager : MonoBehaviour
         yield return StartCoroutine(dialogo.MuestraTexto("¡Bienvenid@!! Eres el anfitrión del juego Adivina Mi Número. Piensa en un número entre 1 y 100.\n" + 
         "Escríbelo en el cuadro de texto y pulsa Iniciar"));
 
-        AnfitrionIniciaJuego(); 
+        accionesAnfitrion.IniciaJuego();        
     }
-
-    private void AnfitrionIniciaJuego()
-    {       
-        accionesAnfitrion.ActivaCuadroTexto();
-        accionesAnfitrion.ActivaBotonIniciar();
-    }
-
-
 
 
     /// <summary>
     /// Activa el panel del jugador y muestra el mensaje de bienvenida
     /// </summary>
-    public void ActivaPanelJugador()
+    public IEnumerator ActivaPanelJugador()
     {
         panelJugador.gameObject.SetActive(true);
 
         //Captura el script de control de diálogo del jugador
         dialogo = panelJugador.gameObject.transform.GetChild(0).gameObject.GetComponent<ControlDialogo>();
-        dialogo.MuestraTexto("Bienvenido, jugador");
+        
+        yield return StartCoroutine(dialogo.MuestraTexto("¡Bienvenid@!! Eres el jugador del juego Adivina Mi Número."));
+        yield return new WaitForSeconds(1f); 
+        yield return StartCoroutine(dialogo.MuestraTexto("El anfitrión ha pensado en un número entre 1 y 100." +
+        "Escribe el número que crees que será en el cuadro de texto y pulsa el botón de Enviar"));
+
+        accionesJugador.IniciaJuego();
     }
 }

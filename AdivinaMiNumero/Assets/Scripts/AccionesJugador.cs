@@ -11,7 +11,12 @@ public class AccionesJugador : MonoBehaviour
        [SerializeField] private GameObject  botonEnviar;
        [SerializeField] private TMP_InputField cuadroTexto;
 
-    
+        private ControlDialogo dialogo;//Para controlar los textos que van a mostrarse
+
+    private void Start() {
+        //Captura el script de control de diálogo del jugador
+        dialogo = transform.parent.gameObject.transform.GetChild(0).gameObject.GetComponent<ControlDialogo>();
+    }
 
     public void ActivaCuadroTexto()
     {
@@ -31,6 +36,34 @@ public class AccionesJugador : MonoBehaviour
     public void DesactivaBotonEnviar()
     {
         botonEnviar.gameObject.SetActive(false);
-    }    
+    }
+
+    
+    //El jugador pulsa sobre el botón Enviar
+    public void BotonEnviar()
+    {
+        DesactivaBotonEnviar();
+        DesactivaCuadroTexto();
+        StartCoroutine(dialogo.MuestraTexto("¡Perfecto!!! Envío tu respuesta al anfitrión. Vamos a esperar a ver qué nos dice sobre ella..."));
+
+        //TODO: implementar el envío de la respuesta al anfitrión        
+    }
+
+    //El jugador recibe una respuesta del anfitrión
+    public void RecibirRespuesta()
+    {
+        StartCoroutine(dialogo.MuestraTexto("¡Ya tenemos una respuesta!. El anfitrión dice que tu número "));
+
+        //TODO: implementar diferente diálogo y acciones según la respuesta recibida
+        
+        
+    }
+
+    //El jugador puede comenzar a jugar
+    public void IniciaJuego()
+    {
+        ActivaCuadroTexto();
+        ActivaBotonEnviar();
+    }
    
 }

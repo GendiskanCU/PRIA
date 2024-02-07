@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using Photon.Pun;
 using TMPro;
 
 public class ValidarNumeroIntroducido : MonoBehaviour
@@ -27,6 +27,7 @@ public class ValidarNumeroIntroducido : MonoBehaviour
         {
             //Si falla la conversión a número genera un aleatorio entre 1 y 100 y lo introduce en sustitución de lo escrito por el usuario
             entradaNumero.text = Random.Range(1, 101).ToString();
-        }
+        }      
+        
     }
 }

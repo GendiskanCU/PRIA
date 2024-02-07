@@ -12,6 +12,7 @@ public class AccionesAnfitrion : MonoBehaviour
     [SerializeField] private TMP_InputField cuadroTexto;
    
     private ControlDialogo dialogo;//Para controlar los textos que van a mostrarse
+    
 
 
     private void Start() {
@@ -74,7 +75,15 @@ public class AccionesAnfitrion : MonoBehaviour
     {
         DesactivaBotonIniciar();
         DesactivaCuadroTexto();
+        
+        //Envía el número a adivinar al GameManager
+        int numero = int.Parse(cuadroTexto.text);
+        GameObject.FindObjectOfType<GameManager>().NumeroAAdivinar = numero;
 
+        Debug.Log("Número a adivinar: " + GameObject.FindObjectOfType<GameManager>().NumeroAAdivinar);
+
+        GameObject.FindObjectOfType<GameManager>().ProximoEnJugar("jugador", "inicia_juego");
+        
         StartCoroutine(dialogo.MuestraTexto("El juego ha comenzado.\nEspera a que el jugador envíe su respuesta al número que cree que estás pensando..."));
     }
 
@@ -157,5 +166,7 @@ public class AccionesAnfitrion : MonoBehaviour
         ActivaBotonMenor();
         ActivaBotonAcierto();        
     }
+
+       
     
 }

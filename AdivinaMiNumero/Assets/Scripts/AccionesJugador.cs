@@ -46,7 +46,9 @@ public class AccionesJugador : MonoBehaviour
         DesactivaCuadroTexto();
         StartCoroutine(dialogo.MuestraTexto("¡Perfecto!!! Envío tu respuesta al anfitrión. Vamos a esperar a ver qué nos dice sobre ella..."));
 
-        //TODO: implementar el envío de la respuesta al anfitrión        
+        //Envía el número del jugador al GameManager
+        int numero = int.Parse(cuadroTexto.text);
+        GameObject.FindObjectOfType<GameManager>().NumeroDelJugador = numero;
     }
 
     //El jugador recibe una respuesta del anfitrión
@@ -54,8 +56,7 @@ public class AccionesJugador : MonoBehaviour
     {
         StartCoroutine(dialogo.MuestraTexto("¡Ya tenemos una respuesta!. El anfitrión dice que tu número "));
 
-        //TODO: implementar diferente diálogo y acciones según la respuesta recibida
-        
+        //TODO: implementar diferente diálogo y acciones según la respuesta recibida        
         
     }
 
@@ -64,6 +65,9 @@ public class AccionesJugador : MonoBehaviour
     {
         ActivaCuadroTexto();
         ActivaBotonEnviar();
+
+        StartCoroutine(dialogo.MuestraTexto("El anfitrión ha pensado en un número entre 1 y 100. Escribe en la caja " + 
+        "de texto qué número crees que es y pulsa Enviar."));
     }
    
 }

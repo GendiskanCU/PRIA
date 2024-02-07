@@ -43,6 +43,12 @@ MonoBehaviour:
   - AnfitrionRespondeAJugador
   - PasaVariableAnfitrion
   - SincronizaNumeroJugador
+  - CambiaValorAnfitrionRed
+  - CambiaValorJugadorRed
+  - JugadorEsMayor
+  - AnfitrionPierde
+  - JugadorAcierta
+  - JugadorEsMenor
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

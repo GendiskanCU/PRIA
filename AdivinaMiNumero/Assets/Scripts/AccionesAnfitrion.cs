@@ -15,13 +15,18 @@ public class AccionesAnfitrion : MonoBehaviour
    
     private ControlDialogo dialogo;//Para controlar los textos que van a mostrarse
 
-    int variableAnfitrion;//Para guardar el número que introduzca el anfitrión
+    private int variableAnfitrion;//Para guardar el número que introduzca el anfitrión
+
+    GameManager gameManager;//Script que controla el juego
     
 
 
     private void Start() {
         //Captura el script de control de diálogo del anfitrión
         dialogo = transform.parent.gameObject.transform.GetChild(0).gameObject.GetComponent<ControlDialogo>();
+
+        //Captura el script que controla el juego
+        gameManager = GameObject.FindObjectOfType<GameManager>();
     }
 
     public void ActivaCuadroTexto()
@@ -82,11 +87,12 @@ public class AccionesAnfitrion : MonoBehaviour
         
         //Envía el número a adivinar al GameManager
         variableAnfitrion = int.Parse(cuadroTexto.text);
-        GameObject.FindObjectOfType<GameManager>().NumeroAAdivinar = variableAnfitrion;
+        gameManager.CambiaValorAnfitrion(variableAnfitrion);
 
-        Debug.Log("Número a adivinar: " + GameObject.FindObjectOfType<GameManager>().NumeroAAdivinar);
+        Debug.Log("Número a adivinar: " + gameManager.NumeroAAdivinar);
 
-        GameObject.FindObjectOfType<GameManager>().ProximoEnJugar("jugador", "inicia_juego");
+        //Indica al manager de quién es el turno siguiente y la acción que debe realizar
+        gameManager.ProximoEnJugar("jugador", "inicia_juego");
         
         StartCoroutine(dialogo.MuestraTexto("El juego ha comenzado.\nEspera a que el jugador envíe su respuesta al número que cree que estás pensando..."));
     }
@@ -94,9 +100,9 @@ public class AccionesAnfitrion : MonoBehaviour
     //El anfitrión pulsa sobre el botón Es Mayor
     public void BotonMayor()
     {
-        if( 1 > 2)
+        if(!(gameManager.NumeroAAdivinar > gameManager.NumeroDelJugador))
         {
-            //TODO: Implementar código si el anfitrión intenta engañar al jugador
+            //Si el anfitrión intenta engañar al jugador
             StartCoroutine(dialogo.MuestraTexto("mmm... Creo que esa no es la respuesta correcta. ¡Inténtalo de nuevo!"));
         }
         else
@@ -107,7 +113,8 @@ public class AccionesAnfitrion : MonoBehaviour
 
             StartCoroutine(dialogo.MuestraTexto("¡Por supuesto! Envío tu respuesta al jugador. Esperemos un poco a ver qué número cree ahora que es..."));
 
-            //TODO: Implementar el paso de la respuesta al jugador            
+            //Indica al manager de quién es el turno siguiente y la acción que debe realizar
+            gameManager.ProximoEnJugar("jugador", "escribe_mayor");
             
         }
     }
@@ -115,9 +122,9 @@ public class AccionesAnfitrion : MonoBehaviour
     //El anfitrión pulsa sobre el botón Es Menor
     public void BotonMenor()
     {
-        if( 1 > 2)
+        if(!(gameManager.NumeroAAdivinar < gameManager.NumeroDelJugador))
         {
-            //TODO: Implementar código si el anfitrión intenta engañar al jugador
+            //Si el anfitrión intenta engañar al jugador
             StartCoroutine(dialogo.MuestraTexto("mmm... Creo que esa no es la respuesta correcta. ¡Inténtalo de nuevo!"));
         }
         else
@@ -128,16 +135,20 @@ public class AccionesAnfitrion : MonoBehaviour
 
             StartCoroutine(dialogo.MuestraTexto("¡Perfecto! Envío tu respuesta al jugador. Vamos a esperar a que nos diga ahora qué número cree que es..."));
 
-            //TODO: Implementar el paso de la respuesta al jugador            
+            //Indica al manager de quién es el turno siguiente y la acción que debe realizar
+            gameManager.ProximoEnJugar("jugador", "escribe_menor");        
         }
     }
 
     //El anfitrión pulsa sobre el botón Has Acertado
     public void BotonAcierto()
     {
-        if( 1 > 2)
-        {
-            //TODO: Implementar código si el anfitrión intenta engañar al jugador
+
+        Debug.Log("Número del jugador: " + gameManager.NumeroDelJugador + "\nNúmero del anfitrión: " + 
+        gameManager.NumeroAAdivinar);
+        if( gameManager.NumeroAAdivinar != gameManager.NumeroDelJugador)
+        {            
+            //Si el anfitrión intenta engañar al jugador
             StartCoroutine(dialogo.MuestraTexto("mmm... Creo que esa no es la respuesta correcta. ¡Inténtalo de nuevo!"));
         }
         else
@@ -148,9 +159,8 @@ public class AccionesAnfitrion : MonoBehaviour
 
             StartCoroutine(dialogo.MuestraTexto("¡Oh, la la!!!! El jugador nos ha vencido... Si quieres la revancha, escribe un nuevo número y pulsa Iniciar"));
 
-            //TODO: Implementar el paso de la respuesta al jugador
-            
-            IniciaJuego();
+            //Indica al manager de quién es el turno siguiente y la acción que debe realizar
+            gameManager.ProximoEnJugar("jugador", "ha_acertado");            
         }
     }
 
@@ -165,7 +175,7 @@ public class AccionesAnfitrion : MonoBehaviour
     public void Responder(int numeroDelJugador)
     {
         StartCoroutine(dialogo.MuestraTexto("¡Oh!, ya tenemos una respuesta. El jugador cree que tu número es: " + numeroDelJugador +
-        "\n. ¿Qué quieres decirle? (Pulsa el botón adecuado)")); 
+        "\n ¿Qué quieres decirle? (Pulsa el botón adecuado)")); 
         ActivaBotonMayor();
         ActivaBotonMenor();
         ActivaBotonAcierto();        

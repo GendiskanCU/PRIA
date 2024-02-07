@@ -82,7 +82,22 @@ public class GameManager : MonoBehaviourPunCallbacks
                 case("inicia_juego"):
                     Debug.Log("El jugador puede comenzar a jugar");                    
                     photonView.RPC(nameof(JugadorIniciaJuego), RpcTarget.OthersBuffered);
-                break;                
+                break;
+
+                case("escribe_mayor"):
+                    Debug.Log("El jugador debe introducir un número más grande");
+                    photonView.RPC(nameof(JugadorEsMayor), RpcTarget.OthersBuffered);
+                break;
+
+                case("escribe_menor"):
+                    Debug.Log("El jugador debe introducir un número más pequeño");
+                    photonView.RPC(nameof(JugadorEsMenor), RpcTarget.OthersBuffered);
+                break;
+
+                case("ha_acertado"):
+                    Debug.Log("El jugador ha acertado el número");
+                    photonView.RPC(nameof(JugadorAcierta), RpcTarget.OthersBuffered);
+                break;
             }
         }
 
@@ -91,13 +106,34 @@ public class GameManager : MonoBehaviourPunCallbacks
             switch(accion)
             {                
                 case("responde_al_jugador"):                
-                    Debug.Log("Entra aquí");
+                    Debug.Log("El anfitrión debe responder al número introducido por el jugador");
                     photonView.RPC(nameof(AnfitrionRespondeAJugador), RpcTarget.OthersBuffered);                    
+                break;
+
+                case("fin_juego"):
+                    Debug.Log("El jugador ha acertado. El anfitrión podría comenzar un nuevo juego");
+                    photonView.RPC(nameof(AnfitrionPierde), RpcTarget.OthersBuffered);
                 break;
             }
         }
     }
 
+    //Para cambiar los valores de las variables del anfitrión y el jugador en local
+    public void CambiaValorAnfitrion(int nuevoValor)
+    {
+        //Cambia el valor local
+        numeroAAdivinar = nuevoValor;
+        //Cambia el valor en el otro player
+        photonView.RPC(nameof(CambiaValorAnfitrionRed), RpcTarget.OthersBuffered, nuevoValor);
+    }
+
+    public void CambiaValorJugador(int nuevoValor)
+    {
+        //Cambia el valor local
+        numeroDelJugador = nuevoValor;
+        //Cambia el valor en el otro player
+        photonView.RPC(nameof(CambiaValorJugadorRed), RpcTarget.OthersBuffered, nuevoValor);
+    }
 
 
     //Métodos de sincronización de las acciones del Jugador
@@ -105,6 +141,24 @@ public class GameManager : MonoBehaviourPunCallbacks
     private void JugadorIniciaJuego()
     {
         accionesJugador.IniciaJuego();
+    }
+
+    [PunRPC]
+    private void JugadorEsMayor()
+    {
+        accionesJugador.RecibirRespuesta("mayor");
+    }
+
+    [PunRPC]
+    private void JugadorEsMenor()
+    {
+        accionesJugador.RecibirRespuesta("menor");
+    }
+
+    [PunRPC]
+    private void JugadorAcierta()
+    {
+        accionesJugador.RecibirRespuesta("igual");
     }
 
 
@@ -115,6 +169,30 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         Debug.Log("El anfitrión debe responder al número que ha dicho el jugador: " + numeroDelJugador);        
         accionesAnfitrion.Responder(numeroDelJugador);
+    }
+
+    [PunRPC]
+    private void AnfitrionPierde()
+    {
+        Debug.Log("El jugador ha acertado el número. El anfitrión podría comenzar un nuevo juego");        
+        accionesAnfitrion.IniciaJuego();
+    }
+
+
+
+
+
+    //Para cambiar los valores de las variables del anfitrión y el jugador en red
+    [PunRPC]
+    private void CambiaValorAnfitrionRed(int nuevoValorRed)
+    {
+        numeroAAdivinar = nuevoValorRed;
+    }
+
+    [PunRPC]
+    private void CambiaValorJugadorRed(int nuevoValorRed)
+    {
+        numeroDelJugador = nuevoValorRed;
     }
         
 }

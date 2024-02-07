@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using Photon.Pun;
+using System;
 
 //Script que controla las acciones del panel del jugador
 
@@ -14,11 +15,16 @@ public class AccionesJugador : MonoBehaviourPunCallbacks
 
         private ControlDialogo dialogo;//Para controlar los textos que van a mostrarse
 
+        private GameManager gameManager;//Script que controla el juego 
+
         private int variableJugador;//Para guardar el número que introduzca el jugador
 
     private void Start() {
         //Captura el script de control de diálogo del jugador
         dialogo = transform.parent.gameObject.transform.GetChild(0).gameObject.GetComponent<ControlDialogo>();
+
+        //Captura el script que controla el juego
+        gameManager = GameObject.FindObjectOfType<GameManager>();
     }
 
     public void ActivaCuadroTexto()
@@ -49,20 +55,40 @@ public class AccionesJugador : MonoBehaviourPunCallbacks
         DesactivaCuadroTexto();
         StartCoroutine(dialogo.MuestraTexto("¡Perfecto!!! Envío tu respuesta al anfitrión. Vamos a esperar a ver qué nos dice sobre ella..."));
 
-        //Envía el número del jugador al GameManager tanto del Jugador como del Anfitrión
+        
         variableJugador = int.Parse(cuadroTexto.text);
         Debug.Log("Variable del jugador: " + variableJugador);
-        photonView.RPC(nameof(SincronizaNumeroJugador), RpcTarget.AllBuffered, variableJugador);        
+        //Cambia el número del jugador en el GameManager tanto del Jugador como del Anfitrión
+        gameManager.CambiaValorJugador(variableJugador);
 
-        GameObject.FindObjectOfType<GameManager>().ProximoEnJugar("anfitrión", "responde_al_jugador");
+        //Indica al manager de quién es el turno siguiente y la acción que debe realizar        
+        gameManager.ProximoEnJugar("anfitrión", "responde_al_jugador");
     }
 
     //El jugador recibe una respuesta del anfitrión
-    public void RecibirRespuesta()
+    public void RecibirRespuesta(string resultado)
     {
-        StartCoroutine(dialogo.MuestraTexto("¡Ya tenemos una respuesta!. El anfitrión dice que tu número "));
+        switch(resultado)
+        {
+            case("mayor"):
+                StartCoroutine(dialogo.MuestraTexto("¡Ya tenemos respuesta!: el anfitrión dice que su número es más grande. Prueba de nuevo con uno mayor"));
+                ActivaCuadroTexto();
+                ActivaBotonEnviar();
+            break;
 
-        //TODO: implementar diferente diálogo y acciones según la respuesta recibida        
+            case("menor"):
+                StartCoroutine(dialogo.MuestraTexto("¡Ya tenemos una respuesta!: el anfitrión dice que su número es menor... Prueba a poner uno más  pequeño"));
+                ActivaCuadroTexto();
+                ActivaBotonEnviar();
+            break;
+
+            case("igual"):
+                StartCoroutine(dialogo.MuestraTexto("¡Ya tenemos una respuesta!. El anfitrión dice que...¡Has adivinado el número!!! ¡¡Enhorabuena!!!"));
+
+                //Indica al manager que el juego ha finalizado, el anfitrión podría comenzar un nuevo juego
+                gameManager.ProximoEnJugar("anfitrión", "fin_juego");
+            break;
+        }        
         
     }
 
@@ -76,11 +102,5 @@ public class AccionesJugador : MonoBehaviourPunCallbacks
         "de texto qué número crees que es y pulsa Enviar."));
     }
 
-    [PunRPC]
-    private void SincronizaNumeroJugador(int valor)
-    {
-        GameObject.FindObjectOfType<GameManager>().NumeroDelJugador = valor;
-        Debug.Log(GameObject.FindObjectOfType<GameManager>().NumeroDelJugador);
-    }
    
 }

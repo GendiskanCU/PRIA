@@ -12,6 +12,10 @@ public class Player : MonoBehaviour
 
     //Para controlar cuándo puede saltar el personaje
     private bool canJump;
+
+    //Punto de disparo
+    private GameObject shootPoint;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -19,6 +23,9 @@ public class Player : MonoBehaviour
         {
             rig = GetComponent<Rigidbody2D>();
             anim = GetComponent<Animator>();
+
+            shootPoint = transform.GetChild(0).gameObject;
+
             //Se le asigna la cámara principal (hay que tener en cuenta que las cámaras no se sincronizan)
             Camera.main.transform.SetParent(transform);
             Camera.main.transform.position = transform.position + (Vector3.up) +transform.forward * -10;
@@ -57,6 +64,11 @@ public class Player : MonoBehaviour
                 canJump = false;
             }
                 
+            //Disparo
+            if(Input.GetButtonDown("Fire1"))
+            {
+                PhotonNetwork.Instantiate("Shuriken", shootPoint.transform.position, shootPoint.transform.rotation);
+            }
 
             //Animación
             anim.SetFloat("velocityX", Mathf.Abs(rig.velocity.x));

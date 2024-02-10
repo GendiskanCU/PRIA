@@ -204,6 +204,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 5
   jumForce: 400
+  initialPositionShootPoint: {x: 0.51, y: -0.61, z: 0}
+  flipPositionShootPoint: {x: -0.62, y: -0.61, z: 0}
 --- !u!114 &8368263400994419739
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -7,17 +7,30 @@ public class Player : MonoBehaviour
 {
     public float speed = 5;
     public float jumForce = 200;
+    
+    //Para controlar las físicas del personaje
     private Rigidbody2D rig;
+
+    //Para controlar las animaciones del personaje
     private Animator anim;
+
+    //Para controlar el giro del personaje
+    private SpriteRenderer spriteRenderer;
 
     //Para controlar cuándo puede saltar el personaje
     private bool canJump;
 
+    //Para controlar cuándo puede disparar el personaje
+    private bool canShot;
+
     //Punto de disparo
-    private GameObject shootPoint;
+    private GameObject shotPoint;
     //Posiciones del punto de disparo según hacia dónde mira el personaje
-    [SerializeField] private Vector3 initialPositionShootPoint = new Vector3(0.51f, -0.61f, 0);
-    [SerializeField] private Vector3 flipPositionShootPoint = new Vector3(-0.62f, -0.61f, 0);
+    [SerializeField] private Vector3 initialPositionshotPoint = new Vector3(0.51f, -0.61f, 0);
+    [SerializeField] private Vector3 flipPositionshotPoint = new Vector3(-0.62f, -0.61f, 0);
+
+    //Tiempo de espera entre disparos
+    [SerializeField] private float timeUntilNewShoot = 0.5f;
 
     // Start is called before the first frame update
     void Start()
@@ -26,9 +39,10 @@ public class Player : MonoBehaviour
         {
             rig = GetComponent<Rigidbody2D>();
             anim = GetComponent<Animator>();
+            spriteRenderer = GetComponent<SpriteRenderer>();
 
-            shootPoint = transform.GetChild(0).gameObject;
-            shootPoint.transform.localPosition = initialPositionShootPoint;
+            shotPoint = transform.GetChild(0).gameObject;
+            shotPoint.transform.localPosition = initialPositionshotPoint;
 
             //Se le asigna la cámara principal (hay que tener en cuenta que las cámaras no se sincronizan)
             Camera.main.transform.SetParent(transform);
@@ -37,6 +51,9 @@ public class Player : MonoBehaviour
 
         //Permite el salto
         canJump = true;
+
+        //Permite el disparo
+        canShot = true;
     }
 
     // Update is called once per frame
@@ -47,27 +64,21 @@ public class Player : MonoBehaviour
             //Movimiento. Se le da velocidad, en ambos ejes porque si no se quedaría parado
             rig.velocity = (transform.right * speed * Input.GetAxis("Horizontal")) + (transform.up * rig.velocity.y);
 
-            //Giro del personaje al comenzar a moverse
-            /*Así se haría sin Photon
-            if (rig.velocity.x > 0.1f)
-                GetComponent<SpriteRenderer>().flipX = false;
-            else if (rig.velocity.x < -0.1f)
-                GetComponent<SpriteRenderer>().flipX = true;*/
-
+            //Giro del personaje
             //Se debe utilizar el método RPC de Photon para que la rotación se sincronice adecuadamente
             //Se evita que RPC se ejecute en cada frame con la segunda condición
-            if(rig.velocity.x > 0.1f && GetComponent<SpriteRenderer>().flipX)
+            if(rig.velocity.x > 0.1f && spriteRenderer.flipX)
             {
                  GetComponent<PhotonView>().RPC("RotateSprite", RpcTarget.All, false);
                  //Recoloca el punto de disparo
-                 shootPoint.transform.localPosition = (shootPoint.transform.localPosition == initialPositionShootPoint ) ? flipPositionShootPoint : initialPositionShootPoint;
+                 shotPoint.transform.localPosition = (shotPoint.transform.localPosition == initialPositionshotPoint ) ? flipPositionshotPoint : initialPositionshotPoint;
             }
                
-            else if(rig.velocity.x < -0.1f && !GetComponent<SpriteRenderer>().flipX)
+            else if(rig.velocity.x < -0.1f && !spriteRenderer.flipX)
             {
                 GetComponent<PhotonView>().RPC("RotateSprite", RpcTarget.All, true);
                 //Recoloca el punto de disparo
-                shootPoint.transform.localPosition = (shootPoint.transform.localPosition == initialPositionShootPoint ) ? flipPositionShootPoint : initialPositionShootPoint;
+                shotPoint.transform.localPosition = (shotPoint.transform.localPosition == initialPositionshotPoint ) ? flipPositionshotPoint : initialPositionshotPoint;
             }
                 
 
@@ -79,10 +90,19 @@ public class Player : MonoBehaviour
             }
                 
             //Disparo. Se debe sincronizar en todos los clientes
-            if(Input.GetButtonDown("Fire1"))
-            {                
-                GameObject shuriken = PhotonNetwork.Instantiate("Shuriken", shootPoint.transform.position, shootPoint.transform.rotation);
-                //shuriken.GetComponent<Rigidbody2D>().AddForce(shootPoint.transform.forward * 2.0f, ForceMode2D.Impulse);                
+            if(canShot && Input.GetButtonDown("Fire1"))
+            { 
+                //Instancia el shuriken               
+                GameObject shuriken = PhotonNetwork.Instantiate("Shuriken", shotPoint.transform.position, shotPoint.transform.rotation);
+                //Lo lanza en la dirección adecuada según el giro del personaje
+                if(spriteRenderer.flipX)
+                    shuriken.GetComponent<Shuriken>().Launch(-1);
+                else
+                    shuriken.GetComponent<Shuriken>().Launch(1);
+
+                canShot = false;
+                //Permite disparar de nuevo cuando pase el tiempo especificado
+                Invoke("AllowNewShot", timeUntilNewShoot);                
             }
 
             //Animación
@@ -95,16 +115,20 @@ public class Player : MonoBehaviour
     [PunRPC]
     public void RotateSprite(bool rotate)
     {
-        GetComponent<SpriteRenderer>().flipX = rotate;
-        //Recoloca el punto de disparo al otro lado        
-        //transform.GetChild(0).gameObject.transform.localPosition =
-            //(shootPoint.transform.localPosition == initialPositionShootPoint ) ? flipPositionShootPoint : initialPositionShootPoint;
+        GetComponent<SpriteRenderer>().flipX = rotate;       
     }
 
     
-    //Método para controlar cuando el personaje toque suelo
+    //Método para controlar cuándo el personaje toca suelo, pudiendo saltar de nuevo
     private void OnCollisionEnter2D(Collision2D other) {
         if(other.gameObject.CompareTag("Floor"))
             canJump = true;
     }
+
+    //Método que permite disparar de nuevo al personaje
+    private void AllowNewShot()
+    {
+        canShot = true;
+    }
+   
 }

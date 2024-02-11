@@ -16,7 +16,6 @@ GameObject:
   - component: {fileID: 3638354935592303908}
   - component: {fileID: 3638354935592303915}
   - component: {fileID: 3638354935592303914}
-  - component: {fileID: 3638354935592303913}
   - component: {fileID: 3638354935592303912}
   m_Layer: 0
   m_Name: Shuriken
@@ -124,11 +123,11 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
+  m_Mass: 0.5
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 0
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: c37cb4ceb17756b45bbd7902ae2de29e, type: 2}
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
@@ -186,7 +185,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_SynchronizeVelocity: 1
-  m_SynchronizeAngularVelocity: 0
+  m_SynchronizeAngularVelocity: 1
   m_TeleportEnabled: 1
   m_TeleportIfDistanceGreaterThan: 3
 --- !u!114 &3638354935592303914
@@ -207,18 +206,6 @@ MonoBehaviour:
   m_SynchronizeLayers:
   - SynchronizeType: 1
     LayerIndex: 0
---- !u!114 &3638354935592303913
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3638354935592303919}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ad61b494e34c48b4b86bd58bfa449fa8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &3638354935592303912
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -231,3 +218,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad61b494e34c48b4b86bd58bfa449fa8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  impulseForce: 10
+  timeOfLife: 2.5

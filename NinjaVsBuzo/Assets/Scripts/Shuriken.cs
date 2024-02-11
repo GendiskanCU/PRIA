@@ -4,19 +4,30 @@ using UnityEngine;
 
 public class Shuriken : MonoBehaviour
 {
+    //Fuerza con la que saldrá impulsado el shuriken
+    [SerializeField] float impulseForce = 10.0f;
+
+    //Tiempo de vida del shuriken
+    [SerializeField] float timeOfLife = 2.0f;
     // Start is called before the first frame update
     void Start()
     {
-        GetComponent<Rigidbody2D>().AddForce(new Vector3(1, 0, 0) * 10, ForceMode2D.Impulse);
-    }
+        //El shuriken se destruirá transcurrido el tiempo de vida especificado
+        Invoke("DestroyShuriken", timeOfLife);
+    }  
 
-    // Update is called once per frame
-    void Update()
+    /// <summary>
+    /// Lanza el shuriken en la dirección especificada    ///
+    /// <param name="direction"> dirección de impulso (1 para derecha ó -1 para izquierda)</param>
+    /// </summary>    
+    public void Launch(int direction)
     {
-        
+        GetComponent<Rigidbody2D>().AddForce(new Vector3(1, 0, 0) * (impulseForce * direction), ForceMode2D.Impulse);
     }
 
-    private void OnCollisionEnter2D(Collision2D other) {
-        //Destroy(this.gameObject);
+    //Destruye el Shuriken
+    private void DestroyShuriken()
+    {
+        Destroy(this.gameObject);
     }
 }

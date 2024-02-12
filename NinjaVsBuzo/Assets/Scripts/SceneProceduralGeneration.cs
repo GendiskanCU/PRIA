@@ -29,17 +29,15 @@ public class SceneProceduralGeneration : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //Solo genera la escena el jugador master
-        if(PhotonNetwork.IsMasterClient)        
-            GeneratesScene();
+       
     }
 
-    private void GeneratesScene()
+    public IEnumerator GeneratesScene()
     {
         //Genera los bordes del recinto de juego
-        GeneratesBorders();
+        yield return StartCoroutine(GeneratesBorders());
         //Genera el suelo proceduralmente
-        GeneratesFloor();
+        yield return StartCoroutine(GeneratesFloor());
     }
 
 
@@ -58,20 +56,22 @@ public class SceneProceduralGeneration : MonoBehaviour
     /// <summary>
     /// Genera los bordes de la escena
     /// </summary>
-    private void GeneratesBorders()
+    private IEnumerator GeneratesBorders()
     {         
         for(int x = (int)minCoordBorderArea.x - (int)numBorderBlocks.izquierda; x <= (int)maxCoodBorderArea.x + (int)numBorderBlocks.derecha; x++)
         {
             //Fila inferior
             for(int y = (int)minCoordBorderArea.y; y >= (int)minCoordBorderArea.y - (int)numBorderBlocks.abajo; y--)
             {
-                SpawnObject("Border", new Vector3(x, y, 0));                
+                SpawnObject("Border", new Vector3(x, y, 0));
+                yield return new WaitForSeconds(0.001f);                
             }  
                 
             //Fila superior
             for(int y = (int)maxCoodBorderArea.y; y <= (int)maxCoodBorderArea.y + (int)numBorderBlocks.arriba; y++)
             {
-                SpawnObject("Border", new Vector3(x, y, 0));                
+                SpawnObject("Border", new Vector3(x, y, 0));
+                yield return new WaitForSeconds(0.001f);                   
             }            
         }            
         for(int y = (int)minCoordBorderArea.y + 1; y <= (int)maxCoodBorderArea.y - 1; y++)
@@ -79,13 +79,15 @@ public class SceneProceduralGeneration : MonoBehaviour
             //Columna izquierda
             for(int x = (int)minCoordBorderArea.x; x >= minCoordBorderArea.x - (int)numBorderBlocks.izquierda; x--)
             {
-                SpawnObject("Border", new Vector3(x, y, 0));                
+                SpawnObject("Border", new Vector3(x, y, 0));
+                yield return new WaitForSeconds(0.001f);                   
             }
             
             //Columna derecha
             for(int x = (int)maxCoodBorderArea.x; x <= maxCoodBorderArea.x + (int)numBorderBlocks.derecha; x++)
             {
-                SpawnObject("Border", new Vector3(x, y, 0));                
+                SpawnObject("Border", new Vector3(x, y, 0));
+                yield return new WaitForSeconds(0.001f);                   
             }
         }
     }
@@ -94,7 +96,7 @@ public class SceneProceduralGeneration : MonoBehaviour
     /// <summary>
     /// Genera proceduralmente el piso de la escena
     /// </summary>
-    private void GeneratesFloor()
+    private IEnumerator GeneratesFloor()
     {
         //Altura máxima para tierra (la última posición se dejará para hierba)
         int maxHeightDirt = height - 1;
@@ -131,7 +133,7 @@ public class SceneProceduralGeneration : MonoBehaviour
                 {
                     SpawnObject("Dirt", new Vector3(x, y, 0));//Instancia los bloques de tierra
                 }
-                
+                yield return new WaitForSeconds(0.001f);   
             }
             SpawnObject("Grass", new Vector3(x, heightDirt + 1, 0) );//Instancia un bloque de hierba encima del último de tierra
         }

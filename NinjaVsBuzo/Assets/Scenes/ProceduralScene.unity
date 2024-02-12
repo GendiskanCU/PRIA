@@ -152,8 +152,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0eb821069179bff49b90592de6d8343e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minCoordBorderArea: {x: -20, y: -1}
-  maxCoodBorderArea: {x: 20, y: 15}
+  minCoordBorderArea: {x: -18, y: -1}
+  maxCoodBorderArea: {x: 18, y: 15}
   height: 8
   differenceBetweenHeight: 2
   minDistanceBricks: 1

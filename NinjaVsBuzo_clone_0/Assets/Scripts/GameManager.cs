@@ -9,7 +9,10 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Invoke("InstatiatePlayers", 1.0f);
+        if(PhotonNetwork.IsMasterClient)
+            StartCoroutine(InstatiateScene());
+            
+        Invoke("InstatiatePlayers", 5.0f);
 
          /*
         if(PhotonNetwork.IsMasterClient)//Si es el jugador 1, el master
@@ -22,9 +25,16 @@ public class GameManager : MonoBehaviour
         } */
     }
 
+    private IEnumerator InstatiateScene()
+    {
+        yield return StartCoroutine(GameObject.Find("ProceduralSceneGenerator").GetComponent<SceneProceduralGeneration>().GeneratesScene());
+
+    }
     private void InstatiatePlayers()
     {
         //La instanciación de cada personaje se hace con Photon
+
+        
 
         //Utiliza el identificador ActorNumber para saber qué jugador soy
         int playerNumber = PhotonNetwork.LocalPlayer.ActorNumber;
@@ -32,7 +42,7 @@ public class GameManager : MonoBehaviour
         //Instancia el personaje adecuado según quién sea el jugador
         switch(playerNumber)
         {
-            case 1:
+            case 1:                
                 PhotonNetwork.Instantiate("Frog", new Vector3(-15f, 10f, 0f), Quaternion.identity);
                 break;
             case 2:

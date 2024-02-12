@@ -411,6 +411,8 @@
 "Assets/Scripts/Connection.cs"
 "Assets/Scripts/GameManager.cs"
 "Assets/Scripts/Player.cs"
+"Assets/Scripts/Player_noMulti.cs"
+"Assets/Scripts/SceneProceduralGeneration.cs"
 "Assets/Scripts/Shuriken.cs"
 -langversion:9.0
 
